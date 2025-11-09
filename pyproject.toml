@@ -6,7 +6,7 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.11,<3.12" # Явно указываем Python 3.11
+python = ">=3.11,<3.14" # Изменено на <3.14, чтобы включить 3.13.4
 Flask = "3.0.0"
 psycopg2-binary = "2.9.7"
 
