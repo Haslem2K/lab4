@@ -1,25 +1,26 @@
 from flask import Flask, request, jsonify
-import psycopg # <--- ИЗМЕНЕНО
+import psycopg
 import os
 from urllib.parse import urlparse
 
 app = Flask(__name__)
 
-# ... (остальной код) ...
+# --- ИСПРАВЛЕНИЕ: Объявляем переменные в глобальной области видимости ---
+DATABASE_URL = os.environ.get('DATABASE_URL')
+conn = None 
+# ----------------------------------------------------------------------
 
 if DATABASE_URL:
     try:
         # Парсинг URL для подключения
         url = urlparse(DATABASE_URL)
-        conn = psycopg.connect( # <--- ИЗМЕНЕНО
+        conn = psycopg.connect(
             dbname=url.path[1:],
             user=url.username,
             password=url.password,
             host=url.hostname,
             port=url.port
         )
-        # ... (остальной код) ...
-
         # Создание таблицы при старте, если она не существует
         with conn.cursor() as cur:
             cur.execute("""
@@ -55,6 +56,7 @@ def echo():
 # Новый эндпоинт для сохранения сообщения в БД
 @app.route('/save', methods=['POST'])
 def save_message():
+    # conn теперь доступен, так как объявлен в глобальной области
     if not conn:
         return jsonify({"error": "DB not connected"}), 500
     
@@ -73,6 +75,7 @@ def save_message():
 # Новый эндпоинт для получения последних 10 сообщений из БД
 @app.route('/messages')
 def get_messages():
+    # conn теперь доступен, так как объявлен в глобальной области
     if not conn:
         return jsonify({"error": "DB not connected"}), 500
     
