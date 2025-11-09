@@ -9,7 +9,8 @@ package-mode = false # <-- ДОБАВЬТЕ ЭТУ СТРОКУ
 [tool.poetry.dependencies]
 python = ">=3.11,<3.14"
 Flask = "3.0.0"
-psycopg2-binary = "2.9.7"
+psycopg2 = "2.9.7" # <--- ИЗМЕНЕНО С psycopg2-binary
+
 
 [build-system]
 requires = ["poetry-core"]
