@@ -1,26 +1,25 @@
 from flask import Flask, request, jsonify
-import psycopg2
+import psycopg # <--- ИЗМЕНЕНО
 import os
 from urllib.parse import urlparse
 
 app = Flask(__name__)
 
-# --- Настройка подключения к БД ---
-# Render автоматически передает Internal Database URL через переменную окружения
-DATABASE_URL = os.environ.get('DATABASE_URL')
-conn = None
+# ... (остальной код) ...
 
 if DATABASE_URL:
     try:
         # Парсинг URL для подключения
         url = urlparse(DATABASE_URL)
-        conn = psycopg2.connect(
-            database=url.path[1:],
+        conn = psycopg.connect( # <--- ИЗМЕНЕНО
+            dbname=url.path[1:],
             user=url.username,
             password=url.password,
             host=url.hostname,
             port=url.port
         )
+        # ... (остальной код) ...
+
         # Создание таблицы при старте, если она не существует
         with conn.cursor() as cur:
             cur.execute("""
